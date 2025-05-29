@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<h:html xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Sistema de Carbonno Fitness Gym</title>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/> <!-- sirve para agregar estilos scc a la aplicacion -->
+        <link rel="icon" href="/img/carbonoFitnessLogo.png" type="image/png"/>
+    </h:head>
+
+    <h:body>
+        <div class="card">
+            <h:form id="forma-clientes">
+                <p:growl id="mensajes" showDetail="true" escape="false" life="8000" sticky="true"/>
+                <div class="card">
+                    <p:menubar>
+                        <p:menuitem value="Inicio" icon="pi pi-fw pi-user"
+                                    update=":forma-clientes:clientes-tabla"
+                                    actionListener="#{indexController.cargarDatos()}"/>
+                        <p:menuitem value="Nuevo cliente" icon="pi pi-fw pi-plus"
+                                    actionListener="#{indexController.agregarCliente()}"
+                                    update=":forma-modal:cliente-ventana"
+                                    oncomplete="PF('ventanaModalCliente').show()"/>
+                        <p:menuitem value="Monitorear Suscripciones"
+                                    icon="pi pi-fw pi-bell"
+                                    actionListener="#{indexController.monitoriarSuscripcion()}"
+                                    update="forma-clientes:mensajes"
+                                    title="Verificar suscripciones vencidas o por vencer"/>
+                    </p:menubar>
+                </div>
+                <div class="card">
+                    <p:dataTable value="#{indexController.clientes}" var="cliente"
+                                 id="clientes-tabla" widgetVar="clientesTabla"
+                                 filteredValue="#{indexController.clientesFiltrados}"
+                                 globalFilterFunction="#{indexController.filtroGlobalPersonalizado}">>
+
+                        <f:facet name="header">
+                            <div class="flex justify-content-center flex-wrap
+                                        card-container yellow-container">
+                                <div class="flex flex-column align-items-center justify-content-center
+                                        w-20rem h-8rem bg-yellow-500 font-bold text-gray-900
+                                        border-round m-2 gap-2">
+                                    <p:graphicImage value="/img/carbonoFitnessLogo.png"
+                                                    width="100" height="100"
+                                                    alt="Logo"/>
+                                    <h3 class="m-0">Carbono Fitness Gym</h3>
+                                </div>
+                            </div>
+
+                            <!-- Campo de búsqueda -->
+
+                            <div class="flex justify-content-center mt-3">
+                                <div class="p-input-icon-left" style="width: 300px;">
+                                    <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter"
+                                                 onkeyup="PF('clientesTabla').filter()"
+                                                 style="width: 100%"
+                                                 placeholder="Buscar clientes..."
+                                                 autocomplete="off"/>
+                                </div>
+                            </div>
+
+                        </f:facet>
+
+                        <!-- <p:column headerText="Id">
+                            <h:outputText value="#{cliente.id}"/>
+                        </p:column>-->
+
+                        <p:column headerText="Nombre" filterBy="#{cliente.nombre}"
+                                  filterMatchMode="contains" filterStyle="display:none">
+                            <h:outputText value="#{cliente.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="Primer apellido">
+                            <h:outputText value="#{cliente.primerApellido}"/>
+                        </p:column>
+
+                        <p:column headerText="Segundo apellido">
+                            <h:outputText value="#{cliente.segundoApellido}"/>
+                        </p:column>
+
+                        <p:column headerText="Fecha de inscripción">
+                            <h:outputText value="#{indexController.formatearLocalDate(cliente.fechaInicio)}"/>
+                        </p:column>
+
+                        <p:column headerText="Fecha de culminación">
+                            <h:outputText value="#{indexController.formatearLocalDate(cliente.fechaFin)}"/>
+                        </p:column>
+
+                        <p:column headerText="Meses contratados">
+                            <h:outputText value="#{cliente.mesesAContratar}"/>
+                        </p:column>
+
+                        <!-- <p:column headerText="Renovación">
+                             <h:outputText value="#{cliente.renovacion}"/>
+                         </p:column> -->
+                        <p:column>
+                            <p:commandButton value="Editar" icon="pi pi-pencil"
+                                             update=":forma-modal:cliente-ventana"
+                                             oncomplete="PF('ventanaModalCliente').show()"
+                                             process="@this"
+                                             class="ui-button-primary"
+                                             style="margin-right: .5rem">
+                                <f:setPropertyActionListener value="#{cliente}"
+                                                             target="#{indexController.clienteSeleccionado}"/>
+                                <p:resetInput target=":forma-modal:cliente-ventana"/>
+                            </p:commandButton>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="Eliminar" class="ui-button-danger"
+                                             icon="pi pi-trash" process="@this"
+                                             oncomplete="PF('eliminarClienteVentana').show()">
+                                <f:setPropertyActionListener value="#{cliente}" target="#{indexController.clienteSeleccionado}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+
+            <h:form id="forma-modal">
+                <p:dialog header="Detalles cliente" showEffect="fade"
+                          modal="true" widgetVar="ventanaModalCliente"
+                          responsive="true">
+                    <p:outputPanel id="cliente-ventana" class="ui-fluid">
+                        <div class="field">
+                            <p:outputLabel for="nombre">Nombre</p:outputLabel>
+                            <p:inputText id="nombre" value="#{indexController.clienteSeleccionado.nombre}"
+                                         required="true"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="primerApellido">Primer apellido</p:outputLabel>
+                            <p:inputText id="primerApellido" value="#{indexController.clienteSeleccionado.primerApellido}"
+                                         required="true"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="primerApellido">Segundo apellido</p:outputLabel>
+                            <p:inputText id="segundoApellido" value="#{indexController.clienteSeleccionado.segundoApellido}"
+                                         required="true"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="fechaInicio">Fecha de registro</p:outputLabel>
+                            <p:datePicker id="fechaInicio"
+                                          value="#{indexController.clienteSeleccionado.fechaInicio}"
+                                          required="true"
+                                          showIcon="true"
+                                          pattern="dd/MM/yyyy"
+                                          placeholder="Seleccione una fecha"/>
+                            <p:message for="fechaInicio"/>
+                            <small id="mensajeFecha" style="color: red; display: none;">La fecha no puede ser anterior a hoy</small>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="mesesAContratar">Meses a contratar</p:outputLabel>
+                            <p:inputNumber id="mesesAContratar"
+                                           value="#{indexController.clienteSeleccionado.mesesAContratar}"
+                                           required="true"
+                                           decimalPlaces="0"
+                                           minValue="1"
+                                           maxValue="12"
+                                           placeholder="1-12 meses"
+                                           oninput="validarMeses(this)"
+                                           onblur="validarMeses(this)">
+                                <f:validateLongRange minimum="1" maximum="12"
+                                                     validatorMessage="Solo puede seleccionar de 1 a 12 meses"/>
+                            </p:inputNumber>
+                            <p:message for="mesesAContratar"/>
+                            <small id="mensajeMeses" style="color: red; display: none;">Solo puede ingresar números del 1 al 12</small>
+                        </div>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <div class="flex justify-content-center">
+                            <p:commandButton value="Guardar" icon="pi pi-check"
+                                             actionListener="#{indexController.guardarCliente()}"
+                                             process="cliente-ventana @this"
+                                             styleClass="mr-2"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times"
+                                             onclick="PF('ventanaModalCliente').hide()"/>
+                        </div>
+                    </f:facet>
+                </p:dialog>
+            </h:form>
+            <h:form id="form-eliminar">
+                <p:confirmDialog widgetVar="eliminarClienteVentana"
+                                 showEffect="fade" width="300"
+                                 message="¿Eliminar cliente?"
+                                 header="Confirmar" severity="warn">
+                    <p:commandButton value="Sí" icon="pi pi-check"
+                                     actionListener="#{indexController.eliminarCliente()}"
+                                     process="@this"
+                                     oncomplete="PF('eliminarClienteVentana).hide()"/>
+                    <p:commandButton value="No" type="button"
+                                     styleClass="ui-button-secondary"
+                                     icon="pi pi-times" onclick="PF('eliminarClienteVentana').hide()"/>
+                </p:confirmDialog>
+            </h:form>
+        </div>
+
+        <script>
+            function validarMeses(input) {
+                const valor = parseInt(input.value);
+                const mensaje = document.getElementById('mensajeMeses');
+
+                if (input.value === '' || isNaN(valor) || valor &lt; 1 || valor > 12) {
+                    mensaje.style.display = 'block';
+                    input.style.borderColor = 'red';
+                } else {
+                    mensaje.style.display = 'none';
+                    input.style.borderColor = '';
+                }
+            }
+
+        </script>
+    </h:body>
+
+</h:html>
