@@ -94,9 +94,6 @@
                         <p:column headerText="Meses contratados" style="text-align: center">
                             <h:outputText value="#{cliente.mesesAContratar} #{cliente.mesesAContratar == 1 ? 'mes' : 'meses'}"/>
                         </p:column>
-                   <!-- <p:column headerText="Renovación">
-                             <h:outputText value="#{cliente.renovacion}"/>
-                         </p:column> -->
                         <p:column>
                             <p:commandButton value="Editar" icon="pi pi-pencil"
                                              update=":forma-modal:cliente-ventana"
