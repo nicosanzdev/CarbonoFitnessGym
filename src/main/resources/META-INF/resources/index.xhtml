@@ -92,7 +92,7 @@
                         </p:column>
 
                         <p:column headerText="Meses contratados" style="text-align: center">
-                            <h:outputText value="#{cliente.mesesAContratar}"/>
+                            <h:outputText value="#{cliente.mesesAContratar} #{cliente.mesesAContratar == 1 ? 'mes' : 'meses'}"/>
                         </p:column>
                    <!-- <p:column headerText="Renovación">
                              <h:outputText value="#{cliente.renovacion}"/>
