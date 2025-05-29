@@ -62,7 +62,7 @@ public class IndexController {
                 LocalDate fechaFin = fechaInicio.plusMonths(mesesAContratar);
                 this.clienteSeleccionado.setFechaFin(fechaFin);
             }
-            this.clienteSeleccionado.setRenovacion(false);
+
             this.clienteService.guardarCliente(this.clienteSeleccionado);
             logger.info("Se ha guardado el cliente correctamente");
             this.clientes.add(this.clienteSeleccionado);
