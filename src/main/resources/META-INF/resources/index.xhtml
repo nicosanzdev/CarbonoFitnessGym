@@ -36,7 +36,7 @@
                                  globalFilterFunction="#{indexController.filtroGlobalPersonalizado}"
                                  scrollable="true"
                                  scrollHeight="290"
-                                 stickyHeader="true">
+                                 stickyHeader="true" style="text-align: center">
 
                         <f:facet name="header">
                             <div class="flex justify-content-center flex-wrap
@@ -70,28 +70,28 @@
                             <h:outputText value="#{cliente.id}"/>
                         </p:column>-->
 
-                        <p:column headerText="Nombre" filterBy="#{cliente.nombre}"
+                        <p:column headerText="Nombre" filterBy="#{cliente.nombre}" style="text-align: center"
                                   filterMatchMode="contains" filterStyle="display:none">
                             <h:outputText value="#{cliente.nombre}"/>
                         </p:column>
 
-                        <p:column headerText="Primer apellido">
+                        <p:column headerText="Primer apellido" style="text-align: center">
                             <h:outputText value="#{cliente.primerApellido}"/>
                         </p:column>
 
-                        <p:column headerText="Segundo apellido">
+                        <p:column headerText="Segundo apellido" style="text-align: center">
                             <h:outputText value="#{cliente.segundoApellido}"/>
                         </p:column>
 
-                        <p:column headerText="Fecha de inscripción">
+                        <p:column headerText="Fecha de inscripción" style="text-align: center">
                             <h:outputText value="#{indexController.formatearLocalDate(cliente.fechaInicio)}"/>
                         </p:column>
 
-                        <p:column headerText="Fecha de culminación">
+                        <p:column headerText="Fecha de culminación" style="text-align: center">
                             <h:outputText value="#{indexController.formatearLocalDate(cliente.fechaFin)}"/>
                         </p:column>
 
-                        <p:column headerText="Meses contratados">
+                        <p:column headerText="Meses contratados" style="text-align: center">
                             <h:outputText value="#{cliente.mesesAContratar}"/>
                         </p:column>
                    <!-- <p:column headerText="Renovación">
@@ -120,6 +120,7 @@
                 </div>
             </h:form>
 
+            <!-- modal que se muestra al editar un cliente -->
             <h:form id="forma-modal">
                 <p:dialog header="Detalles cliente" showEffect="fade"
                           modal="true" widgetVar="ventanaModalCliente"
@@ -181,6 +182,8 @@
                     </f:facet>
                 </p:dialog>
             </h:form>
+
+            <!-- modal que se muestra al eliminar un cliente -->
             <h:form id="form-eliminar">
                 <p:confirmDialog widgetVar="eliminarClienteVentana"
                                  showEffect="fade" width="300"
