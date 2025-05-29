@@ -66,7 +66,7 @@ public class IndexController {
             this.clienteService.guardarCliente(this.clienteSeleccionado);
             logger.info("Se ha guardado el cliente correctamente");
             this.clientes.add(this.clienteSeleccionado);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cuenta agregada correctamente"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente agregado correctamente"));
         }else{
             //Modificar existente
 

@@ -33,7 +33,10 @@
                     <p:dataTable value="#{indexController.clientes}" var="cliente"
                                  id="clientes-tabla" widgetVar="clientesTabla"
                                  filteredValue="#{indexController.clientesFiltrados}"
-                                 globalFilterFunction="#{indexController.filtroGlobalPersonalizado}">>
+                                 globalFilterFunction="#{indexController.filtroGlobalPersonalizado}"
+                                 scrollable="true"
+                                 scrollHeight="290"
+                                 stickyHeader="true">
 
                         <f:facet name="header">
                             <div class="flex justify-content-center flex-wrap
@@ -91,8 +94,7 @@
                         <p:column headerText="Meses contratados">
                             <h:outputText value="#{cliente.mesesAContratar}"/>
                         </p:column>
-
-                        <!-- <p:column headerText="Renovación">
+                   <!-- <p:column headerText="Renovación">
                              <h:outputText value="#{cliente.renovacion}"/>
                          </p:column> -->
                         <p:column>
